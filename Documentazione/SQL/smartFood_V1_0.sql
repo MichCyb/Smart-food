@@ -1,0 +1,135 @@
+/*SMART FOOD DB*/
+
+CREATE DATABASE IF NOT EXISTS SmartFood;
+USE SmartFood;
+
+CREATE TABLE Categoria (
+	Id INT PRIMARY KEY AUTO_INCREMENT,
+	Nome VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE Gruppo (
+	Id INT PRIMARY KEY AUTO_INCREMENT,
+	Titolo VARCHAR(30) NOT NULL,
+	DataC DATE NOT NULL
+);
+
+CREATE TABLE Nazione (
+	Id INT PRIMARY KEY AUTO_INCREMENT,
+	Nome VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE Luogo (
+	Id INT PRIMARY KEY AUTO_INCREMENT,
+	Titolo VARCHAR(30) NOT NULL,
+	Descrizione VARCHAR(100),
+	Temperatura VARCHAR(20),
+	Img VARCHAR(2000) NOT NULL,
+	CodGruppo INT,
+	FOREIGN KEY (CodGruppo) REFERENCES Gruppo (Id)
+);
+
+CREATE TABLE Insieme (
+	Id INT PRIMARY KEY AUTO_INCREMENT,
+	Nome VARCHAR(30) NOT NULL,
+	Img VARCHAR(30) NOT NULL,
+	CodLuogo INT,
+	FOREIGN KEY (CodLuogo) REFERENCES Luogo (Id)
+);
+
+CREATE TABLE Prodotto (
+	Id INT PRIMARY KEY AUTO_INCREMENT,
+	Totale INT NOT NULL,
+	Unita VARCHAR(4),
+	Quant FLOAT,
+	Marca VARCHAR(50) NOT NULL,
+	Nome VARCHAR(30) NOT NULL,
+	Conf VARCHAR(30),
+	Nutriscore VARCHAR(10),
+	Img VARCHAR(2000),
+	Ingredienti VARCHAR(300),
+	CodIns INT,
+	FOREIGN KEY (CodIns) REFERENCES Insieme (Id)
+);
+
+CREATE TABLE Persona (
+	Id INT PRIMARY KEY AUTO_INCREMENT,
+	Nome VARCHAR(30) NOT NULL,
+	Cognome VARCHAR(30) NOT NULL,
+	DataN DATE NOT NULL,
+	Dati BOOLEAN NOT NULL,
+	CodNazione INT,
+	FOREIGN KEY (CodNazione) REFERENCES Nazione (Id)
+);
+
+CREATE TABLE Account (
+	CodPer INT PRIMARY KEY,
+	Email VARCHAR(30) NOT NULL,
+	Password VARCHAR(40) NOT NULL,
+	DataI DATE NOT NULL,
+	DataSosp DATE,
+	Username VARCHAR(30) NOT NULL,
+	Img VARCHAR(2000) NOT NULL,
+	FOREIGN KEY (CodPer) REFERENCES Persona (Id),
+	UNIQUE(Email, Password)
+);
+
+CREATE TABLE Ingrediente (
+	Id INT PRIMARY KEY AUTO_INCREMENT,
+	Quant INT NOT NULL,
+	CodProd INT,
+	FOREIGN KEY (CodProd) REFERENCES Prodotto (Id)
+);
+
+CREATE TABLE Ricetta (
+	Id INT PRIMARY KEY AUTO_INCREMENT,
+	Costo ENUM('Basso','Medio','Alto') NOT NULL,
+	Titolo VARCHAR(30) NOT NULL,
+	Descrizione VARCHAR(1000) NOT NULL,
+	Img VARCHAR(2000) NOT NULL,
+	Video VARCHAR(2000),
+	Cottura VARCHAR(20) NOT NULL,
+	Dose VARCHAR(20) NOT NULL,
+	Preparazione VARCHAR(20) NOT NULL,
+	Difficolta INT NOT NULL CHECK(Difficolta BETWEEN 1 AND 5),
+	CodAccount INT,
+	FOREIGN KEY (CodAccount) REFERENCES Account (CodPer)
+);
+
+CREATE TABLE Lista (
+	CodGruppo INT,
+	CodIngrediente INT,
+	DataI DATE NOT NULL,
+	DataPrev DATE,
+	DataCheck DATE,
+	Checked BOOLEAN NOT NULL,
+	PRIMARY KEY (CodGruppo, CodIngrediente),
+	FOREIGN KEY (CodGruppo) REFERENCES Gruppo (Id),
+	FOREIGN KEY (CodIngrediente) REFERENCES Ingrediente (Id)
+);
+
+CREATE TABLE Divisione (
+	CodGruppo INT,
+	CodAcc INT,
+	DataI DATE NOT NULL,
+	PRIMARY KEY (CodGruppo, CodAcc),
+	FOREIGN KEY (CodGruppo) REFERENCES Gruppo (Id),
+	FOREIGN KEY (CodAcc) REFERENCES Account (CodPer)
+);
+
+CREATE TABLE Afferenza (
+	CodRicetta INT,
+	CodIngrediente INT,
+	DataI DATE NOT NULL,
+	PRIMARY KEY (CodRicetta, CodIngrediente),
+	FOREIGN KEY (CodRicetta) REFERENCES Ricetta (Id),
+	FOREIGN KEY (CodIngrediente) REFERENCES Ingrediente (Id)
+);
+
+CREATE TABLE Organizzazione (
+	CodProd INT,
+	CodCat INT,
+	PRIMARY KEY (CodProd, CodCat),
+	FOREIGN KEY (CodProd) REFERENCES Prodotto (Id),
+	FOREIGN KEY (CodCat) REFERENCES Categoria (Id)
+);
