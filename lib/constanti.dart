@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 const Color toastColorError = Colors.white;
 const Color toastBackColorError = Colors.red;
+const Color NormalText = Colors.black;
 
 
 const kHintTextStyle = TextStyle(

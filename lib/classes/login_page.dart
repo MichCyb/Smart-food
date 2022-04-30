@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:smart_food/classes/register_page.dart';
 import '../constanti.dart';
 
 class LoginApp extends StatefulWidget {
@@ -24,16 +25,12 @@ class _LoginAppState extends State<LoginApp> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const Text(
-          'Email',
-          style: kLabelStyle,
-        ),
         const SizedBox(
           height: 10.0,
         ),
         Container(
           alignment: Alignment.centerLeft,
-          height: 60,
+          height: 50,
           decoration: kBoxDecorationStyle,
           child: TextFormField(
             controller: _emailCont,
@@ -54,7 +51,7 @@ class _LoginAppState extends State<LoginApp> {
               prefixIcon: Icon(
                 Icons.email,
                 color: Colors.black,),
-              hintText: "Inserisci la tua email",
+              hintText: "Email",
               hintStyle: kHintTextStyle,
             ),
           ),
@@ -76,13 +73,14 @@ class _LoginAppState extends State<LoginApp> {
         ),
         Container(
           alignment: Alignment.centerLeft,
-          height: 60,
+          height: 50,
           decoration: kBoxDecorationStyle,
           child: TextFormField(
             controller: _passCont,
             obscureText: !_isPassVisible,
             style: const TextStyle(
               color: Colors.black,
+              fontFamily: 'OpenSans',
             ),
             decoration: InputDecoration(
               border: InputBorder.none,
@@ -154,7 +152,7 @@ class _LoginAppState extends State<LoginApp> {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           elevation: 5.0,
-          padding: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(13.0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.0),
           ),
@@ -210,7 +208,13 @@ class _LoginAppState extends State<LoginApp> {
 
   Widget _buildSignupBtn() {
     return GestureDetector(
-      onTap: () => print('Sign Up Button Pressed'),
+      onTap: () {
+        Navigator
+         .push(
+          context,
+          MaterialPageRoute(builder: (context) => RegisterPage())
+        );
+      },
       child: RichText(
         text: TextSpan(
           children: [
